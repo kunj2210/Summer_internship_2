@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DiaPredict AI - Advanced Diabetes Risk Analysis</title>
+    <!-- Google Fonts: Inter & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS stylesheet link -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="glow-bg-1"></div>
+    <div class="glow-bg-2"></div>
+
+    <div class="app-container">
+        <!-- Header Section -->
+        <header class="app-header">
+            <div class="brand">
+                <i class="fa-solid fa-heart-pulse logo-icon"></i>
+                <div class="brand-text">
+                    <h1>DiaPredict <span>AI</span></h1>
+                    <p>Logistic Regression Clinical Evaluation Tool</p>
+                </div>
+            </div>
+            <div class="model-badge">
+                <span class="status-indicator online"></span>
+                <span>LR Model: Ready (Acc: 70.8%)</span>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="app-main">
+            <!-- Left Panel: Input Health Details Form -->
+            <section class="form-card card-blur">
+                <div class="card-header">
+                    <i class="fa-solid fa-stethoscope"></i>
+                    <h2>Patient Health Vitals</h2>
+                </div>
+                <p class="card-subtitle">Fill in the current physiological measurements of the patient.</p>
+
+                <form id="predictionForm" class="grid-form">
+                    <!-- Pregnancies -->
+                    <div class="input-group">
+                        <label for="Pregnancies">
+                            Pregnancies
+                            <i class="fa-regular fa-circle-question tooltip-icon" title="Number of times pregnant"></i>
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-baby input-icon"></i>
+                            <input type="number" id="Pregnancies" name="Pregnancies" min="0" max="20" placeholder="0" value="1" required>
+                        </div>
+                    </div>
+
+                    <!-- Glucose -->
+                    <div class="input-group">
+                        <label for="Glucose">
+                            Glucose (mg/dL)
+                            <i class="fa-regular fa-circle-question tooltip-icon" title="Plasma glucose concentration at 2 hours in an oral glucose tolerance test"></i>
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-droplet-blood input-icon"></i>
+                            <input type="number" id="Glucose" name="Glucose" min="0" max="300" placeholder="120" value="115" required>
+                        </div>
+                    </div>
+
+                    <!-- Blood Pressure -->
+                    <div class="input-group">
+                        <label for="BloodPressure">
+                            Blood Pressure (mmHg)
+                            <i class="fa-regular fa-circle-question tooltip-icon" title="Diastolic blood pressure"></i>
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-gauge-simple-high input-icon"></i>
+                            <input type="number" id="BloodPressure" name="BloodPressure" min="0" max="200" placeholder="80" value="72" required>
+                        </div>
+                    </div>
+
+                    <!-- Skin Thickness -->
+                    <div class="input-group">
+                        <label for="SkinThickness">
+                            Skin Thickness (mm)
+                            <i class="fa-regular fa-circle-question tooltip-icon" title="Triceps skin fold thickness"></i>
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-ruler-horizontal input-icon"></i>
+                            <input type="number" id="SkinThickness" name="SkinThickness" min="0" max="99" placeholder="20" value="23" required>
+                        </div>
+                    </div>
+
+                    <!-- Insulin -->
+                    <div class="input-group">
+                        <label for="Insulin">
+                            Insulin (mu U/mL)
+                            <i class="fa-regular fa-circle-question tooltip-icon" title="2-Hour serum insulin"></i>
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-syringe input-icon"></i>
+                            <input type="number" id="Insulin" name="Insulin" min="0" max="900" placeholder="80" value="80" required>
+                        </div>
+                    </div>
+
+                    <!-- BMI -->
+                    <div class="input-group">
+                        <label for="BMI">
+                            Body Mass Index (BMI)
+                            <i class="fa-regular fa-circle-question tooltip-icon" title="BMI = weight(kg) / height(m)²"></i>
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-weight-scale input-icon"></i>
+                            <input type="number" id="BMI" name="BMI" step="0.1" min="0.0" max="70.0" placeholder="25.0" value="28.4" required>
+                        </div>
+                    </div>
+
+                    <!-- Diabetes Pedigree Function -->
+                    <div class="input-group">
+                        <label for="DiabetesPedigreeFunction">
+                            Pedigree Score
+                            <i class="fa-regular fa-circle-question tooltip-icon" title="A function which scores likelihood of diabetes based on family history"></i>
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-dna input-icon"></i>
+                            <input type="number" id="DiabetesPedigreeFunction" name="DiabetesPedigreeFunction" step="0.001" min="0.0" max="3.0" placeholder="0.350" value="0.380" required>
+                        </div>
+                    </div>
+
+                    <!-- Age -->
+                    <div class="input-group">
+                        <label for="Age">
+                            Age (years)
+                            <i class="fa-regular fa-circle-question tooltip-icon" title="Patient age in years"></i>
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-calendar-days input-icon"></i>
+                            <input type="number" id="Age" name="Age" min="1" max="120" placeholder="30" value="29" required>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="form-actions">
+                        <button type="button" id="btnReset" class="btn btn-secondary">
+                            <i class="fa-solid fa-arrow-rotate-left"></i> Reset
+                        </button>
+                        <button type="submit" id="btnSubmit" class="btn btn-primary">
+                            <span>Analyze Diabetes Risk</span>
+                            <i class="fa-solid fa-arrow-right-long btn-arrow"></i>
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Right Panel: Diagnostics & Prediction Output -->
+            <section class="results-card card-blur">
+                <div class="card-header">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <h2>Risk Evaluation</h2>
+                </div>
+
+                <!-- Empty state placeholder -->
+                <div id="resultsPlaceholder" class="results-placeholder">
+                    <div class="placeholder-icon-container">
+                        <i class="fa-solid fa-shield-halved placeholder-icon"></i>
+                    </div>
+                    <h3>Ready for Assessment</h3>
+                    <p>Enter patient vitals and click <strong>"Analyze Diabetes Risk"</strong> to run the predictive model and generate clinical advice.</p>
+                </div>
+
+                <!-- Result visualization (Hidden initially) -->
+                <div id="resultsContent" class="results-content hidden">
+                    <div class="risk-gauge-container">
+                        <svg class="progress-ring" width="220" height="220">
+                            <circle class="progress-ring__circle-bg" stroke="rgba(255,255,255,0.06)" stroke-width="12" fill="transparent" r="90" cx="110" cy="110" />
+                            <circle id="riskDial" class="progress-ring__circle" stroke="#10B981" stroke-width="12" fill="transparent" r="90" cx="110" cy="110" />
+                        </svg>
+                        <div class="risk-percentage-box">
+                            <span id="riskProbability" class="risk-num">0%</span>
+                            <span class="risk-lbl">probability</span>
+                        </div>
+                    </div>
+
+                    <div class="risk-assessment-pill" id="riskBadge">
+                        <span id="riskLevelText">LOW RISK</span>
+                    </div>
+
+                    <div class="clinical-findings">
+                        <h4><i class="fa-solid fa-circle-info"></i> Model Insights</h4>
+                        <div class="findings-grid">
+                            <div class="finding-item">
+                                <span class="lbl">Prediction</span>
+                                <span class="val" id="modelPrediction">No Diabetes (0)</span>
+                            </div>
+                            <div class="finding-item">
+                                <span class="lbl">Algorithm</span>
+                                <span class="val">Logistic Regression</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Clinical Recommendations -->
+                    <div class="recommendations-box">
+                        <h4><i class="fa-solid fa-clipboard-list"></i> Clinical Recommendations</h4>
+                        <ul id="recommendationsList" class="rec-list">
+                            <!-- Injected dynamically by JS -->
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Loader Spinner -->
+                <div id="resultsLoader" class="results-loader hidden">
+                    <div class="spinner"></div>
+                    <p>Running inference models...</p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="app-footer">
+            <p>&copy; 2026 DiaPredict AI - Clinical Decision Support Tool. Developed using Logistic Regression algorithm.</p>
+        </footer>
+    </div>
+
+    <!-- JS script link -->
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
