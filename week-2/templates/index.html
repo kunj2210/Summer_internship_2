@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Estimate the resale value of any vehicle using advanced Linear Regression and Random Forest Regressor models. Evaluate your car's price instantly.">
+    <title>AutoValuate AI | Premium Car Price Prediction</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Ambient Background Blobs -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <div class="app-container">
+        <!-- Sidebar / Header -->
+        <header class="app-header">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <i data-lucide="car-front"></i>
+                </div>
+                <div>
+                    <h1>AutoValuate AI</h1>
+                    <p class="tagline">Enterprise Machine Learning Valuation</p>
+                </div>
+            </div>
+            
+            <div class="model-stats-quick">
+                <div class="stat-badge">
+                    <span class="stat-lbl">Linear Reg R²</span>
+                    <span class="stat-val text-blue">80.77%</span>
+                </div>
+                <div class="stat-badge">
+                    <span class="stat-lbl">Random Forest R²</span>
+                    <span class="stat-val text-purple">83.40%</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-layout">
+            <!-- Form Card -->
+            <section class="card form-card">
+                <div class="card-header">
+                    <i data-lucide="sliders" class="header-icon"></i>
+                    <h2>Vehicle Parameter Input</h2>
+                </div>
+                
+                <form id="prediction-form" class="prediction-form">
+                    <!-- Year of purchase -->
+                    <div class="form-group">
+                        <label for="year">
+                            <span>Year of Purchase</span>
+                            <span class="info-tip" title="Year the vehicle was bought (2012 - 2024)">
+                                <i data-lucide="help-circle"></i>
+                            </span>
+                        </label>
+                        <div class="input-wrapper">
+                            <i data-lucide="calendar" class="input-icon"></i>
+                            <select id="year" name="Year" required>
+                                <option value="2024" selected>2024</option>
+                                <option value="2023">2023</option>
+                                <option value="2022">2022</option>
+                                <option value="2021">2021</option>
+                                <option value="2020">2020</option>
+                                <option value="2019">2019</option>
+                                <option value="2018">2018</option>
+                                <option value="2017">2017</option>
+                                <option value="2016">2016</option>
+                                <option value="2015">2015</option>
+                                <option value="2014">2014</option>
+                                <option value="2013">2013</option>
+                                <option value="2012">2012</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Mileage -->
+                    <div class="form-group">
+                        <label for="mileage">
+                            <span>Mileage (km driven)</span>
+                            <span class="label-aside">Leave blank for median (approx. 77.7k)</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <i data-lucide="gauge" class="input-icon"></i>
+                            <input type="number" id="mileage" name="Mileage" placeholder="e.g. 45000" min="0" max="300000">
+                        </div>
+                    </div>
+
+                    <!-- Engine Size -->
+                    <div class="form-group">
+                        <label for="engine_size">
+                            <span>Engine Size (cc)</span>
+                            <span class="label-aside">Leave blank for median (1197 cc)</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <i data-lucide="cpu" class="input-icon"></i>
+                            <input type="number" id="engine_size" name="Engine_Size" placeholder="e.g. 1497" min="100" max="6000">
+                        </div>
+                    </div>
+
+                    <!-- Fuel Type -->
+                    <div class="form-group">
+                        <label for="fuel_type">Fuel Type</label>
+                        <div class="input-wrapper">
+                            <i data-lucide="droplet" class="input-icon"></i>
+                            <select id="fuel_type" name="Fuel_Type" required>
+                                <option value="Petrol" selected>Petrol</option>
+                                <option value="Diesel">Diesel</option>
+                                <option value="CNG">CNG</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Owner Type -->
+                    <div class="form-group">
+                        <label for="owner_type">Owner History</label>
+                        <div class="input-wrapper">
+                            <i data-lucide="users" class="input-icon"></i>
+                            <select id="owner_type" name="Owner_Type" required>
+                                <option value="First-hand" selected>First-hand (1 owner)</option>
+                                <option value="Second-hand">Second-hand (2 owners)</option>
+                                <option value="Third-hand">Third-hand (3+ owners)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Car Condition -->
+                    <div class="form-group">
+                        <label for="car_condition">Car Condition</label>
+                        <div class="input-wrapper">
+                            <i data-lucide="shield-check" class="input-icon"></i>
+                            <select id="car_condition" name="Car_Condition" required>
+                                <option value="Excellent">Excellent (Like New)</option>
+                                <option value="Good" selected>Good (Minor wear)</option>
+                                <option value="Fair">Fair (Noticeable wear)</option>
+                                <option value="Poor">Poor (Needs repair)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submit-btn">
+                        <span>Evaluate Car Value</span>
+                        <i data-lucide="sparkles" class="btn-sparkle"></i>
+                    </button>
+                </form>
+            </section>
+
+            <!-- Results Panel -->
+            <section class="results-panel">
+                <!-- Main Value Display Card -->
+                <div class="card val-display-card">
+                    <div class="card-header">
+                        <i data-lucide="badge-dollar-sign" class="header-icon text-green"></i>
+                        <h2>Estimated Selling Price</h2>
+                    </div>
+                    
+                    <div class="price-showcase">
+                        <div class="main-price-dial">
+                            <div class="glow-ring"></div>
+                            <div class="price-box">
+                                <span class="price-prefix">₹</span>
+                                <span class="price-amount" id="predicted-price">--</span>
+                                <span class="price-suffix">Lakhs</span>
+                            </div>
+                        </div>
+                        <p class="dial-caption" id="model-descriptor">Please click "Evaluate" to run prediction models</p>
+                    </div>
+
+                    <!-- Comparison Section -->
+                    <div class="model-comparison-row">
+                        <div class="model-comp-card active" id="rf-card">
+                            <div class="comp-header">
+                                <span class="dot purple-dot"></span>
+                                <h4>Random Forest (Best)</h4>
+                            </div>
+                            <div class="comp-price" id="rf-price">--</div>
+                            <div class="comp-r2">R²: 83.40%</div>
+                        </div>
+                        <div class="model-comp-card" id="lr-card">
+                            <div class="comp-header">
+                                <span class="dot blue-dot"></span>
+                                <h4>Linear Regression</h4>
+                            </div>
+                            <div class="comp-price" id="lr-price">--</div>
+                            <div class="comp-r2">R²: 80.77%</div>
+                        </div>
+                    </div>
+
+                    <!-- Imputation Alert -->
+                    <div id="imputation-alert" class="alert-box info hidden">
+                        <i data-lucide="info" class="alert-icon"></i>
+                        <span id="imputation-alert-text"></span>
+                    </div>
+                </div>
+
+                <!-- Recommendations / Details Card -->
+                <div class="card details-card">
+                    <div class="card-header">
+                        <i data-lucide="file-text" class="header-icon text-blue"></i>
+                        <h2>Market Insights & Guidance</h2>
+                    </div>
+                    
+                    <div class="insights-body">
+                        <div class="metric-progress-grid">
+                            <div class="progress-item">
+                                <div class="progress-lbl">
+                                    <span>Model Variance (Delta)</span>
+                                    <span id="price-delta">--</span>
+                                </div>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar" id="delta-bar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="recommendations-area">
+                            <h3>Valuation Recommendations:</h3>
+                            <ul id="recommendations-list" class="styled-list">
+                                <li class="placeholder-li">Submit form to load recommendations...</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer class="app-footer">
+            <p>&copy; 2026 AutoValuate AI. Built with Flask, scikit-learn & Premium Light Theme design.</p>
+        </footer>
+    </div>
+
+    <!-- Initialize Lucide Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
