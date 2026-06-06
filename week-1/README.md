@@ -1,8 +1,8 @@
-# Diabetes Prediction Model (InternPe Week 1 Task)
+# Diabetes Prediction Model
 
 An interactive, end-to-end Machine Learning web application that predicts whether a patient has diabetes based on health vitals (Glucose level, BMI, Age, Blood Pressure, Insulin, etc.) using a **Logistic Regression** classifier.
 
-This project is completed as part of the **InternPe Internship Program - Week 1 Task**.
+![DiaPredict AI Dashboard](static/screenshot.png)
 
 ---
 
